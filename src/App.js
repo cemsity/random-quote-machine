@@ -1,25 +1,36 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Quote from './Quote';
+import Links from './Links'
 
 class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      quote: {}
+    }
+  }
+  componentDidMount() {
+    this.getRandomQuote();
+  }
+  getRandomQuote = () =>{
+    let randNum = undefined;
+    fetch('https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json')
+    .then(res =>{
+      return res.json();
+    }).then(quotes =>{
+      randNum = Math.floor(Math.random() * quotes["quotes"].length)
+      this.setState({
+        quote: quotes["quotes"][randNum]
+      })
+      console.log(this.state.quote)
+    })
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="play card">
+        <Quote quote={this.state.quote}/>
+        <Links />
       </div>
     );
   }
